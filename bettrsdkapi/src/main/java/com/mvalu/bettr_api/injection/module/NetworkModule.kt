@@ -32,7 +32,6 @@ object NetworkModule {
      */
     @Provides
     @Reusable
-    @JvmStatic
     internal fun providePostApi(retrofit: Retrofit): ServiceApi {
         return retrofit.create(ServiceApi::class.java)
     }
@@ -43,7 +42,6 @@ object NetworkModule {
      */
     @Provides
     @Reusable
-    @JvmStatic
     internal fun provideRetrofitInterface(): Retrofit {
 
         val loggingInterceptor: HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
