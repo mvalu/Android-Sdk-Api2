@@ -68,7 +68,12 @@ abstract class ApiSdkBase {
                             onNetworkError(apiTag)
                         }
                         else -> {
-                            onApiError(NOT_SPECIFIED_ERROR_CODE, apiTag, error?.message!!)
+                            if(error?.message.isNullOrBlank()){
+                                onApiError(NOT_SPECIFIED_ERROR_CODE, apiTag, "Something went wrong! Please try after sometime")
+                            }else {
+                                onApiError(NOT_SPECIFIED_ERROR_CODE, apiTag, error?.message!!)
+                            }
+
                         }
                     }
                 }
