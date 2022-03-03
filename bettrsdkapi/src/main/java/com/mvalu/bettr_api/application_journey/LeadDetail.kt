@@ -30,6 +30,9 @@ class LeadDetail() : Parcelable {
     @field:Json(name = "mobileNumber")
     var mobileNumber: String? = null
 
+    @field:Json(name = "kycType")
+    var kycType: String? = null
+
     @field:Json(name = "loanAmount")
     var loanAmount: String? = null
 
@@ -130,6 +133,7 @@ class LeadDetail() : Parcelable {
         status = parcel.readString()
         leadName = parcel.readString()
         mobileNumber = parcel.readString()
+        kycType = parcel.readString()
         loanAmount = parcel.readString()
         tenure = parcel.readString()
         purpose = parcel.readString()
@@ -164,6 +168,7 @@ class LeadDetail() : Parcelable {
         parcel.writeString(status)
         parcel.writeString(leadName)
         parcel.writeString(mobileNumber)
+        parcel.writeString(kycType)
         parcel.writeString(loanAmount)
         parcel.writeString(tenure)
         parcel.writeString(purpose)

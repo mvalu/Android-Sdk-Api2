@@ -4,5 +4,7 @@ enum class VerifyKycStatus(val value: String?) {
 /*Values for doc upload (pan/ selfie/ okyc)*/
     APPROVED("APPROVED"),
     INPROCESS("INPROCESS"),
-    FAILED("FAILED")
+    FAILED("FAILED"),
+    CKYC("CKYC"),
+    OKYC("OKYC")
 }
