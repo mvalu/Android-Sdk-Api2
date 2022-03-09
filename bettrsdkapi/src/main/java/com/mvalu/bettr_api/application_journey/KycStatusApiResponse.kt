@@ -7,6 +7,6 @@ class KycStatusApiResponse : ApiBaseResponse() {
     @field:Json(name = "status")
     var status: Boolean? = null
 
-    @field:Json(name = "ckycStatus")
-    var ckycStatus: String? = null
+    @field:Json(name = "kycStatus")
+    var kycStatus: String? = null
 }
