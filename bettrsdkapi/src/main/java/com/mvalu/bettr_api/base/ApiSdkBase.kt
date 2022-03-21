@@ -1,5 +1,11 @@
 package com.mvalu.bettr_api.base
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
+import android.widget.Toast
+import com.mvalu.bettr_api.BettrApiSdk
 import com.mvalu.bettr_api.network.ApiTag
 import com.mvalu.bettr_api.network.ServiceApi
 import com.mvalu.bettr_api.utils.BettrApiSdkLogger
@@ -65,7 +71,11 @@ abstract class ApiSdkBase {
                             onTimeout(apiTag)
                         }
                         is IOException -> {
-                            onNetworkError(apiTag)
+                            if(isConnected()){
+                                Toast.makeText(BettrApiSdk.getApplicationContext(),"Our Network is down!", Toast.LENGTH_LONG).show()
+                            }else{
+                                onNetworkError(apiTag)
+                            }
                         }
                         else -> {
                             if(error?.message.isNullOrBlank()){
@@ -117,6 +127,25 @@ abstract class ApiSdkBase {
 
         } catch (e: Exception) {
             e.message!!
+        }
+    }
+
+
+    fun isConnected(): Boolean {
+        val cm = BettrApiSdk.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = cm.activeNetwork ?: return false
+            val networkCapabilities = cm.getNetworkCapabilities(network) ?: return false
+
+            val isInternetSuspended =
+                !networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_SUSPENDED)
+            (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                    && networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    && !isInternetSuspended)
+        } else {
+            val networkInfo = cm.activeNetworkInfo
+            networkInfo?.typeName
+            networkInfo != null && networkInfo.isConnected
         }
     }
 
