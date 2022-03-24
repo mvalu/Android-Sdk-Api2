@@ -85,6 +85,25 @@ class KycSubmitResult {
 
         @field:Json(name = "pincode")
         var pincode: String? = null
+              
+        @field:Json(name = "kycType")
+        var kycType: String? = null
+
+        @field:Json(name = "zipCode")
+        var zipCode: String? = null
+        
+        @field:Json(name = "addressLineOne")
+        var addressLineOne: String? = null
+
+        @field:Json(name = "addressLineTwo")
+        var addressLineTwo: String? = null
+        
+        @field:Json(name = "city")
+        var city: String? = null
+
+        @field:Json(name = "country")
+        var country: String? = null
+        
     }
 
 

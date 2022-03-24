@@ -6,6 +6,7 @@ import com.mvalu.bettr_api.account_statements.AccountStatementsApiResponse
 import com.mvalu.bettr_api.account_statements.transactions.AccountStatementTransactionInfoApiResponse
 import com.mvalu.bettr_api.account_statements.transactions.AccountStatementTransactionsApiResponse
 import com.mvalu.bettr_api.application_journey.IFSCCityAndBranchApiResponse
+import com.mvalu.bettr_api.application_journey.KycStatusApiResponse
 import com.mvalu.bettr_api.application_journey.LeadDetail
 import com.mvalu.bettr_api.application_journey.LeadDetailApiResponse
 import com.mvalu.bettr_api.application_journey.bureau.*
@@ -352,7 +353,7 @@ interface ServiceApi {
     ): Observable<Response<VerifyDocumentsApiResponse>>
 
     /*----------------------new document verify api--------*/
-    @POST("v1/{organizationId}/application/{applicationId}/leadDocumentVerifyNew")
+    @POST("v1/{organizationId}/application/{applicationId}/leadDocumentVerifyForCkyc")
     fun verifyDocumentsNew(
         @Path("organizationId") organizationId: String,
         @Path("applicationId") applicationId: String,
@@ -699,5 +700,12 @@ interface ServiceApi {
         @Path("leadId") leadId: String,
         @Body request: CompanyNameSubmitRequest
     ): Observable<Response<LeadDetailApiResponse>>
+
+    // new api for ckyc
+    @POST("v1/{organizationId}/ckyc/getKycStatus")
+    fun getKycStatus(
+        @Path("organizationId") organizationId: String,
+        @Body request: LeadRequest
+    ): Observable<Response<KycStatusApiResponse>>
 
 }
