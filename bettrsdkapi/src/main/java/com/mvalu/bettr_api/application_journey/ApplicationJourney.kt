@@ -94,6 +94,20 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
 
     private var sendSmsApiCallback : ApiResponseCallback<ApiBaseResponse>? = null
 
+    private var getKycStatusCallBack: ApiResponseCallback<KycStatusApiResponse>? = null
+
+
+    fun callGetKycStatusApi(
+        request: LeadRequest,
+        getKycStatusCallBack : ApiResponseCallback<KycStatusApiResponse>
+    ){
+        if (!BettrApiSdk.isSdkInitialized()) {
+            throw IllegalArgumentException(ErrorMessage.SDK_NOT_INITIALIZED_ERROR.value)
+        }
+        this.getKycStatusCallBack = getKycStatusCallBack
+        callApi(serviceApi.getKycStatus(BettrApiSdk.getOrganizationId(), request), ApiTag.KYC_STATUS_API)
+    }
+
     fun callSendSmsApi(
         request: SMSDataRequest,
         sendSmsApiCallback : ApiResponseCallback<ApiBaseResponse>
@@ -104,6 +118,9 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
         this.sendSmsApiCallback = sendSmsApiCallback
         callApi(serviceApi.sendSMSData(request), ApiTag.SMS_DATA_API)
     }
+
+
+
     fun uploadAadharXmlFile(
         body: MultipartBody.Part,
         description: RequestBody,
@@ -660,6 +677,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
         aadharBack: String?,
         applicationId: String,
         docType: String,
+        leadId:String,
         verifyDocumentsCallBack: ApiResponseCallback<VerifyDocumentsResult>
     ) {
         if (!BettrApiSdk.isSdkInitialized()) {
@@ -668,7 +686,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
         this.verifyDocumentsCallBack = verifyDocumentsCallBack
         val verifyDocumentsRequest = VerifyDocumentsRequest().apply {
             this.userId = BettrApiSdk.getUserId()
-            this.leadId = applicationId
+            this.leadId = leadId
             this.pan = panCard
             this.photo = profilePic
             this.aadharFront = aadharFront
@@ -1130,6 +1148,12 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
 
     override fun onApiSuccess(apiTag: ApiTag, response: Any) {
         when (apiTag) {
+
+            ApiTag.KYC_STATUS_API -> {
+                val kycStatusResponse = response as KycStatusApiResponse
+                getKycStatusCallBack?.onSuccess(kycStatusResponse)
+            }
+
             ApiTag.GET_BUREAU_ADDRESS_API -> {
                 val bureauAddrsResponse = response as BureauAddressResponse
                 getBureauAddrsCallBack?.onSuccess(bureauAddrsResponse.result!!)
@@ -1304,6 +1328,9 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
     override fun onApiError(errorCode: Int, apiTag: ApiTag, errorMessage: String) {
         BettrApiSdkLogger.printInfo(TAG, apiTag.name + " " + errorMessage)
         when (apiTag) {
+            ApiTag.KYC_STATUS_API -> {
+                getKycStatusCallBack?.onError(errorCode,errorMessage)
+            }
             ApiTag.GET_BUREAU_ADDRESS_API -> {
                 getBureauAddrsCallBack?.onError(errorCode,errorMessage)
             }
@@ -1411,6 +1438,10 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
     override fun onTimeout(apiTag: ApiTag) {
         BettrApiSdkLogger.printInfo(TAG, apiTag.name + " " + ErrorMessage.API_TIMEOUT_ERROR.value)
         when (apiTag) {
+
+            ApiTag.KYC_STATUS_API -> {
+                getKycStatusCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.API_TIMEOUT_ERROR.value)
+            }
 
             ApiTag.GST_INVOICE_UPLOAD_API -> {
                 uploadGSTInvoiceCallBack?.onError(ErrorMessage.API_TIMEOUT_ERROR.value)
@@ -1539,6 +1570,10 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
     override fun onNetworkError(apiTag: ApiTag) {
         BettrApiSdkLogger.printInfo(TAG, apiTag.name + " " + ErrorMessage.NETWORK_ERROR.value)
         when (apiTag) {
+            ApiTag.KYC_STATUS_API -> {
+                getKycStatusCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.NETWORK_ERROR.value)
+            }
+
             ApiTag.GST_INVOICE_UPLOAD_API -> {
                 uploadGSTInvoiceCallBack?.onError(ErrorMessage.NETWORK_ERROR.value)
             }
@@ -1657,6 +1692,11 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
     override fun onAuthError(apiTag: ApiTag) {
         BettrApiSdkLogger.printInfo(TAG, apiTag.name + " " + ErrorMessage.AUTH_ERROR.value)
         when (apiTag) {
+
+            ApiTag.KYC_STATUS_API -> {
+                getKycStatusCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.AUTH_ERROR.value)
+            }
+
             ApiTag.GST_INVOICE_UPLOAD_API -> {
                 uploadGSTInvoiceCallBack?.onError(ErrorMessage.AUTH_ERROR.value)
             }
@@ -1774,6 +1814,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
 
     override fun onProgressUpdate(percentage: Int, apiTag: ApiTag) {
         when (apiTag) {
+
             ApiTag.GST_INVOICE_UPLOAD_API -> {
                 uploadGSTInvoiceCallBack?.progressUpdate(percentage)
             }
