@@ -69,8 +69,8 @@ class LeadDetail() : Parcelable {
     @field:Json(name = "userDetail")
     var userDetail: UserDetail? = UserDetail()
 
-    @field:Json(name = "timelines")
-    var timeLines: Map<String, String?>? = null
+//    @field:Json(name = "timelines")
+//    var timeLines: Map<String, String?>? = null
 
 //    @field:Json(name = "isActive")
 //    var isActive: Boolean? = null
@@ -117,8 +117,8 @@ class LeadDetail() : Parcelable {
     @field:Json(name = "leadRejectedReason")
     var leadRejectedReason: String? = null
 
-    @field:Json(name = "sectionDetail")
-    var sectionDetail: SectionDetail? = null
+//    @field:Json(name = "sectionDetail")
+//    var sectionDetail: SectionDetail? = null
 
     @field:Json(name = "lastStep")
     var lastStep: String? = null
@@ -146,7 +146,7 @@ class LeadDetail() : Parcelable {
 //        earnings = parcel.createTypedArrayList(EarningsItem)
         application = parcel.readParcelable(ApplicationDetail::class.java.classLoader)
         userDetail = parcel.readParcelable(UserDetail::class.java.classLoader)
-        timeLines?.let { parcel.readMap(it, String.javaClass.classLoader) }
+//        timeLines?.let { parcel.readMap(it, String.javaClass.classLoader) }
 //        timeLines = parcel.readValue(Map::class.java.classLoader) as? Map<String, String?>
 //        parcel.readMap(timeLines, String.javaClass.classLoader)
 //        isActive = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
@@ -156,7 +156,7 @@ class LeadDetail() : Parcelable {
         bureauVerified = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
 
         leadRejectedReason = parcel.readString()
-        sectionDetail = parcel.readParcelable(SectionDetail::class.java.classLoader)
+//        sectionDetail = parcel.readParcelable(SectionDetail::class.java.classLoader)
         lastStep = parcel.readString()
         nextStep = parcel.readString()
     }
@@ -183,14 +183,14 @@ class LeadDetail() : Parcelable {
         parcel.writeParcelable(userDetail, flags)
 //        parcel.writeBundle(writeMapToBundle(timeLines))
 //        parcel.writeValue(timeLines)
-        parcel.writeMap(timeLines)
+//        parcel.writeMap(timeLines)
 //        parcel.writeValue(isActive)
         parcel.writeValue(leadRejected)
         parcel.writeValue(bureauAnswer)
         parcel.writeValue(bureauKnowledge)
         parcel.writeValue(bureauVerified)
         parcel.writeString(leadRejectedReason)
-        parcel.writeParcelable(sectionDetail, flags)
+//        parcel.writeParcelable(sectionDetail, flags)
         parcel.writeString(lastStep)
         parcel.writeString(nextStep)
     }
@@ -303,13 +303,13 @@ class LeadDetail() : Parcelable {
     /**
      * Returns date for respective lead status (backend status).
      */
-    fun getDateForStatus(status: String): String? {
-        return if (!timeLines.isNullOrEmpty()) {
-            if (timeLines!!.containsKey(status)) {
-                timeLines!!.getValue(status)
-            } else null
-        } else null
-    }
+//    fun getDateForStatus(status: String): String? {
+//        return if (!timeLines.isNullOrEmpty()) {
+//            if (timeLines!!.containsKey(status)) {
+//                timeLines!!.getValue(status)
+//            } else null
+//        } else null
+//    }
 
     /**
      * Returns total earnings amount for this lead
