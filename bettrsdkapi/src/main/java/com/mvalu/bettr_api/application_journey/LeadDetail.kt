@@ -3,6 +3,7 @@ package com.mvalu.bettr_api.application_journey
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
 import com.mvalu.bettr_api.card_user.UserDetail
 import com.squareup.moshi.Json
 import java.lang.Exception
@@ -164,6 +165,8 @@ class LeadDetail() : Parcelable {
 //        sectionDetail = parcel.readParcelable(SectionDetail::class.java.classLoader)
             lastStep = parcel.readString()
             nextStep = parcel.readString()
+
+            Log.i("--------------", crashLogInLeadDetail.toString())
             if(crashLogInLeadDetail != null){
                 crashLogInLeadDetail?.catchCrashLog(null, parcel)
             }
