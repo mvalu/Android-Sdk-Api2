@@ -16,6 +16,9 @@ class VerifyDocumentsResult {
     @field:Json(name = "error")
     var error: String? = null
 
+    @field:Json(name = "kycType")
+    var kycType: String? = null
+
     @field:Json(name = "leadObj")
     var leadObj: LeadDetail? = null
 
