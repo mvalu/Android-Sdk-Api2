@@ -361,8 +361,8 @@ interface ServiceApi {
     ): Observable<Response<VerifyDocumentsApiResponse>>
 
     /*---------------Happay server error api-----------------*/
-    @POST("v1/{organizationId}/application/{applicationId}/ckycHappayApi")
-    fun verifyCkycHappay(
+    @POST("v1/{organizationId}/application/{applicationId}/ckyc")
+    fun verifyCkyc(
         @Path("organizationId") organizationId: String,
         @Path("applicationId") applicationId: String,
         @Body request: BureauStatusRequest

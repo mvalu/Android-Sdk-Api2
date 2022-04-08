@@ -96,7 +96,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
 
     private var getKycStatusCallBack: ApiResponseCallback<KycStatusApiResponse>? = null
 
-    private var kycHappayCallBack:  ApiResponseCallback<VerifyDocumentsResult>? = null
+    private var ckycCallBack:  ApiResponseCallback<VerifyDocumentsResult>? = null
 
     fun callGetKycStatusApi(
         request: LeadRequest,
@@ -705,21 +705,21 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
         )
     }
 
-    fun verifyCkycHappay(
+    fun verifyCkyc(
         applicationId: String,
         leadId:String,
-        kycHappayCallBack: ApiResponseCallback<VerifyDocumentsResult>
+        ckycCallBack: ApiResponseCallback<VerifyDocumentsResult>
     ) {
         if (!BettrApiSdk.isSdkInitialized()) {
             throw IllegalArgumentException(ErrorMessage.SDK_NOT_INITIALIZED_ERROR.value)
         }
-        this.kycHappayCallBack = kycHappayCallBack
+        this.ckycCallBack = ckycCallBack
         val bureauStatusRequest = BureauStatusRequest().apply {
             this.userId = BettrApiSdk.getUserId()
             this.leadId = leadId
         }
         callApi(
-            serviceApi.verifyCkycHappay(
+            serviceApi.verifyCkyc(
                 BettrApiSdk.getOrganizationId(),
                 applicationId,
                 bureauStatusRequest
@@ -1318,7 +1318,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
             ApiTag.CKYC_HAPPAY_API -> {
                 BettrApiSdkLogger.printInfo(TAG, "documents verified successfully")
                 val verifyDocumentsApiResponse = response as VerifyDocumentsApiResponse
-                kycHappayCallBack?.onSuccess(verifyDocumentsApiResponse.results!!)
+                ckycCallBack?.onSuccess(verifyDocumentsApiResponse.results!!)
             }
             ApiTag.CHECKLIST_API -> {
                 BettrApiSdkLogger.printInfo(TAG, "checklist fetched successfully")
@@ -1444,7 +1444,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
                 verifyDocumentsCallBack?.onError(errorCode, errorMessage)
             }
             ApiTag.CKYC_HAPPAY_API -> {
-                kycHappayCallBack?.onError(errorCode, errorMessage)
+                ckycCallBack?.onError(errorCode, errorMessage)
             }
             ApiTag.CHECKLIST_API -> {
                 checkListCallBack?.onError(errorCode, errorMessage)
@@ -1569,7 +1569,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
                 )
             }
             ApiTag.CKYC_HAPPAY_API -> {
-                kycHappayCallBack?.onError(
+                ckycCallBack?.onError(
                     NOT_SPECIFIED_ERROR_CODE,
                     ErrorMessage.API_TIMEOUT_ERROR.value
                 )
@@ -1700,7 +1700,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
                 )
             }
             ApiTag.CKYC_HAPPAY_API -> {
-                kycHappayCallBack?.onError(
+                ckycCallBack?.onError(
                     NO_NETWORK_ERROR_CODE,
                     ErrorMessage.NETWORK_ERROR.value
                 )
@@ -1829,7 +1829,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
                 )
             }
             ApiTag.CKYC_HAPPAY_API -> {
-                kycHappayCallBack?.onError(
+                ckycCallBack?.onError(
                     NOT_SPECIFIED_ERROR_CODE,
                     ErrorMessage.AUTH_ERROR.value
                 )
