@@ -165,11 +165,6 @@ class LeadDetail() : Parcelable {
 //        sectionDetail = parcel.readParcelable(SectionDetail::class.java.classLoader)
             lastStep = parcel.readString()
             nextStep = parcel.readString()
-
-            Log.i("--------------", crashLogInLeadDetail.toString())
-            if(crashLogInLeadDetail != null){
-                crashLogInLeadDetail?.catchCrashLog(null, parcel)
-            }
         } catch (e: Exception){
             if(crashLogInLeadDetail != null){
                 crashLogInLeadDetail?.catchCrashLog(e, parcel)
