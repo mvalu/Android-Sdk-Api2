@@ -96,6 +96,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
 
     private var getKycStatusCallBack: ApiResponseCallback<KycStatusApiResponse>? = null
 
+    private var ckycCallBack:  ApiResponseCallback<VerifyDocumentsResult>? = null
 
     fun callGetKycStatusApi(
         request: LeadRequest,
@@ -704,6 +705,29 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
         )
     }
 
+    fun verifyCkyc(
+        applicationId: String,
+        leadId:String,
+        ckycCallBack: ApiResponseCallback<VerifyDocumentsResult>
+    ) {
+        if (!BettrApiSdk.isSdkInitialized()) {
+            throw IllegalArgumentException(ErrorMessage.SDK_NOT_INITIALIZED_ERROR.value)
+        }
+        this.ckycCallBack = ckycCallBack
+        val bureauStatusRequest = BureauStatusRequest().apply {
+            this.userId = BettrApiSdk.getUserId()
+            this.leadId = leadId
+        }
+        callApi(
+            serviceApi.verifyCkyc(
+                BettrApiSdk.getOrganizationId(),
+                applicationId,
+                bureauStatusRequest
+            ),
+            ApiTag.CKYC_HAPPAY_API
+        )
+    }
+
     fun verifySelfieReDocumentsNew(
         profilePic: String?,
         applicationId: String,
@@ -1291,6 +1315,11 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
                 val verifyDocumentsApiResponse = response as VerifyDocumentsApiResponse
                 verifyDocumentsCallBack?.onSuccess(verifyDocumentsApiResponse.results!!)
             }
+            ApiTag.CKYC_HAPPAY_API -> {
+                BettrApiSdkLogger.printInfo(TAG, "documents verified successfully")
+                val verifyDocumentsApiResponse = response as VerifyDocumentsApiResponse
+                ckycCallBack?.onSuccess(verifyDocumentsApiResponse.results!!)
+            }
             ApiTag.CHECKLIST_API -> {
                 BettrApiSdkLogger.printInfo(TAG, "checklist fetched successfully")
                 val checkListApiResponse = response as CheckListApiResponse
@@ -1414,6 +1443,9 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
             ApiTag.VERIFY_DOCUMENTS_API -> {
                 verifyDocumentsCallBack?.onError(errorCode, errorMessage)
             }
+            ApiTag.CKYC_HAPPAY_API -> {
+                ckycCallBack?.onError(errorCode, errorMessage)
+            }
             ApiTag.CHECKLIST_API -> {
                 checkListCallBack?.onError(errorCode, errorMessage)
             }
@@ -1532,6 +1564,12 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
             }
             ApiTag.VERIFY_DOCUMENTS_API -> {
                 verifyDocumentsCallBack?.onError(
+                    NOT_SPECIFIED_ERROR_CODE,
+                    ErrorMessage.API_TIMEOUT_ERROR.value
+                )
+            }
+            ApiTag.CKYC_HAPPAY_API -> {
+                ckycCallBack?.onError(
                     NOT_SPECIFIED_ERROR_CODE,
                     ErrorMessage.API_TIMEOUT_ERROR.value
                 )
@@ -1661,6 +1699,12 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
                     ErrorMessage.NETWORK_ERROR.value
                 )
             }
+            ApiTag.CKYC_HAPPAY_API -> {
+                ckycCallBack?.onError(
+                    NO_NETWORK_ERROR_CODE,
+                    ErrorMessage.NETWORK_ERROR.value
+                )
+            }
             ApiTag.CHECKLIST_API -> {
                 checkListCallBack?.onError(NO_NETWORK_ERROR_CODE, ErrorMessage.NETWORK_ERROR.value)
             }
@@ -1780,6 +1824,12 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
             }
             ApiTag.VERIFY_DOCUMENTS_API -> {
                 verifyDocumentsCallBack?.onError(
+                    NOT_SPECIFIED_ERROR_CODE,
+                    ErrorMessage.AUTH_ERROR.value
+                )
+            }
+            ApiTag.CKYC_HAPPAY_API -> {
+                ckycCallBack?.onError(
                     NOT_SPECIFIED_ERROR_CODE,
                     ErrorMessage.AUTH_ERROR.value
                 )

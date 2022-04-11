@@ -7,6 +7,8 @@ import com.mvalu.bettr_api.card_user.UserDetail
 import com.squareup.moshi.Json
 import java.util.*
 
+var crashLogInLeadDetail : LeadDetail.CrashLogInLeadDetail? = null
+
 class LeadDetail() : Parcelable {
 
     @Transient
@@ -69,8 +71,8 @@ class LeadDetail() : Parcelable {
     @field:Json(name = "userDetail")
     var userDetail: UserDetail? = UserDetail()
 
-    @field:Json(name = "timelines")
-    var timeLines: Map<String, String?>? = null
+//    @field:Json(name = "timelines")
+//    var timeLines: Map<String, String?>? = null
 
 //    @field:Json(name = "isActive")
 //    var isActive: Boolean? = null
@@ -117,8 +119,8 @@ class LeadDetail() : Parcelable {
     @field:Json(name = "leadRejectedReason")
     var leadRejectedReason: String? = null
 
-    @field:Json(name = "sectionDetail")
-    var sectionDetail: SectionDetail? = null
+//    @field:Json(name = "sectionDetail")
+//    var sectionDetail: SectionDetail? = null
 
     @field:Json(name = "lastStep")
     var lastStep: String? = null
@@ -127,38 +129,44 @@ class LeadDetail() : Parcelable {
     var nextStep: String? = null
 
     constructor(parcel: Parcel) : this() {
-        productName = parcel.readString()
-        createdAt = parcel.readString()
-        id = parcel.readString()
-        status = parcel.readString()
-        leadName = parcel.readString()
-        mobileNumber = parcel.readString()
-        kycType = parcel.readString()
-        loanAmount = parcel.readString()
-        tenure = parcel.readString()
-        purpose = parcel.readString()
-        customerUserId = parcel.readString()
-        channelTenantId = parcel.readString()
-        productType = parcel.readString()
-        channelUserId = parcel.readString()
-        pinCode = parcel.readString()
-        checkerId = parcel.readString()
+        try{
+            productName = parcel.readString()
+            createdAt = parcel.readString()
+            id = parcel.readString()
+            status = parcel.readString()
+            leadName = parcel.readString()
+            mobileNumber = parcel.readString()
+            kycType = parcel.readString()
+            loanAmount = parcel.readString()
+            tenure = parcel.readString()
+            purpose = parcel.readString()
+            customerUserId = parcel.readString()
+            channelTenantId = parcel.readString()
+            productType = parcel.readString()
+            channelUserId = parcel.readString()
+            pinCode = parcel.readString()
+            checkerId = parcel.readString()
 //        earnings = parcel.createTypedArrayList(EarningsItem)
-        application = parcel.readParcelable(ApplicationDetail::class.java.classLoader)
-        userDetail = parcel.readParcelable(UserDetail::class.java.classLoader)
-        timeLines?.let { parcel.readMap(it, String.javaClass.classLoader) }
+            application = parcel.readParcelable(ApplicationDetail::class.java.classLoader)
+            userDetail = parcel.readParcelable(UserDetail::class.java.classLoader)
+//        timeLines?.let { parcel.readMap(it, String.javaClass.classLoader) }
 //        timeLines = parcel.readValue(Map::class.java.classLoader) as? Map<String, String?>
 //        parcel.readMap(timeLines, String.javaClass.classLoader)
 //        isActive = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
-        leadRejected = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
-        bureauAnswer = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
-        bureauKnowledge = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
-        bureauVerified = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+            leadRejected = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+            bureauAnswer = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+            bureauKnowledge = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+            bureauVerified = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
 
-        leadRejectedReason = parcel.readString()
-        sectionDetail = parcel.readParcelable(SectionDetail::class.java.classLoader)
-        lastStep = parcel.readString()
-        nextStep = parcel.readString()
+            leadRejectedReason = parcel.readString()
+//        sectionDetail = parcel.readParcelable(SectionDetail::class.java.classLoader)
+            lastStep = parcel.readString()
+            nextStep = parcel.readString()
+        } catch (e: Exception){
+            if(crashLogInLeadDetail != null){
+                crashLogInLeadDetail?.catchCrashLog(e, parcel)
+            }
+        }
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -178,19 +186,19 @@ class LeadDetail() : Parcelable {
         parcel.writeString(channelUserId)
         parcel.writeString(pinCode)
         parcel.writeString(checkerId)
-//        parcel.writeTypedList(earnings)
         parcel.writeParcelable(application, flags)
         parcel.writeParcelable(userDetail, flags)
 //        parcel.writeBundle(writeMapToBundle(timeLines))
 //        parcel.writeValue(timeLines)
-        parcel.writeMap(timeLines)
+//        parcel.writeMap(timeLines)
 //        parcel.writeValue(isActive)
         parcel.writeValue(leadRejected)
         parcel.writeValue(bureauAnswer)
         parcel.writeValue(bureauKnowledge)
         parcel.writeValue(bureauVerified)
+        
         parcel.writeString(leadRejectedReason)
-        parcel.writeParcelable(sectionDetail, flags)
+//        parcel.writeParcelable(sectionDetail, flags)
         parcel.writeString(lastStep)
         parcel.writeString(nextStep)
     }
@@ -303,13 +311,13 @@ class LeadDetail() : Parcelable {
     /**
      * Returns date for respective lead status (backend status).
      */
-    fun getDateForStatus(status: String): String? {
-        return if (!timeLines.isNullOrEmpty()) {
-            if (timeLines!!.containsKey(status)) {
-                timeLines!!.getValue(status)
-            } else null
-        } else null
-    }
+//    fun getDateForStatus(status: String): String? {
+//        return if (!timeLines.isNullOrEmpty()) {
+//            if (timeLines!!.containsKey(status)) {
+//                timeLines!!.getValue(status)
+//            } else null
+//        } else null
+//    }
 
     /**
      * Returns total earnings amount for this lead
@@ -323,5 +331,9 @@ class LeadDetail() : Parcelable {
 //        }
 
         return totalAmount
+    }
+
+    interface CrashLogInLeadDetail{
+        fun catchCrashLog(e : java.lang.Exception?, parcel: Parcel)
     }
 }
