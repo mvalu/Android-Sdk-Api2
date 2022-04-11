@@ -3,11 +3,8 @@ package com.mvalu.bettr_api.application_journey
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
-import android.util.Log
 import com.mvalu.bettr_api.card_user.UserDetail
 import com.squareup.moshi.Json
-import java.lang.Exception
-import java.lang.RuntimeException
 import java.util.*
 
 var crashLogInLeadDetail : LeadDetail.CrashLogInLeadDetail? = null
@@ -156,10 +153,10 @@ class LeadDetail() : Parcelable {
 //        timeLines = parcel.readValue(Map::class.java.classLoader) as? Map<String, String?>
 //        parcel.readMap(timeLines, String.javaClass.classLoader)
 //        isActive = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
-            leadRejected = parcel.readInt() == 1//parcel.readValue(Boolean::class.java.classLoader) as? Boolean
-            bureauAnswer = parcel.readInt() == 1//parcel.readValue(Boolean::class.java.classLoader) as? Boolean
-            bureauKnowledge = parcel.readInt() == 1//parcel.readValue(Boolean::class.java.classLoader) as? Boolean
-            bureauVerified = parcel.readInt() == 1//parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+            leadRejected = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+            bureauAnswer = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+            bureauKnowledge = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+            bureauVerified = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
 
             leadRejectedReason = parcel.readString()
 //        sectionDetail = parcel.readParcelable(SectionDetail::class.java.classLoader)
@@ -189,21 +186,17 @@ class LeadDetail() : Parcelable {
         parcel.writeString(channelUserId)
         parcel.writeString(pinCode)
         parcel.writeString(checkerId)
-//        parcel.writeTypedList(earnings)
         parcel.writeParcelable(application, flags)
         parcel.writeParcelable(userDetail, flags)
 //        parcel.writeBundle(writeMapToBundle(timeLines))
 //        parcel.writeValue(timeLines)
 //        parcel.writeMap(timeLines)
 //        parcel.writeValue(isActive)
-        parcel.writeInt(if (leadRejected ?: false) 1 else 0)
-        parcel.writeInt(if (bureauAnswer ?: false) 1 else 0)
-        parcel.writeInt(if (bureauKnowledge ?: false) 1 else 0)
-        parcel.writeInt(if (bureauVerified ?: false) 1 else 0)
-//        parcel.writeValue(leadRejected)
-//        parcel.writeValue(bureauAnswer)
-//        parcel.writeValue(bureauKnowledge)
-//        parcel.writeValue(bureauVerified)
+        parcel.writeValue(leadRejected)
+        parcel.writeValue(bureauAnswer)
+        parcel.writeValue(bureauKnowledge)
+        parcel.writeValue(bureauVerified)
+        
         parcel.writeString(leadRejectedReason)
 //        parcel.writeParcelable(sectionDetail, flags)
         parcel.writeString(lastStep)
