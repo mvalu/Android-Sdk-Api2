@@ -61,7 +61,10 @@ class AccountInfo() : Parcelable {
 
     @field:Json(name = "scanAndPayEnable")
     var scanAndPayEnable: Boolean? = null
-
+    
+    @field:Json(name = "nextBillingDate")
+    var nextBillingDate: String? = null
+    
     constructor(parcel: Parcel) : this() {
         id = parcel.readString()
         organizationId = parcel.readString()
@@ -82,6 +85,7 @@ class AccountInfo() : Parcelable {
         status = parcel.readString()
         userVpa = parcel.readString()
         scanAndPayEnable = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
+        nextBillingDate = parcel.readString()
 
     }
 
@@ -105,6 +109,7 @@ class AccountInfo() : Parcelable {
         parcel.writeString(status)
         parcel.writeString(userVpa)
         parcel.writeValue(scanAndPayEnable)
+        parcel.writeString(nextBillingDate)
 
     }
 
