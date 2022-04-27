@@ -23,4 +23,11 @@ class PaymentDueInfo {
 
     @field:Json(name = "paymentButton")
     var paymentButton: Boolean? = false
+    
+    @field:Json(name = "interestBenefit")
+    var interestBenefit: String? = null
+    
+    @field:Json(name = "note_message")
+    var note_message: String? = null
+    
 }
