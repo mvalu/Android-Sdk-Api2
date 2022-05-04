@@ -33,4 +33,7 @@ class PaymentDueInfo {
     @field:Json(name = "status_Color")
     var status_Color: String? = null
     
+    @field:Json(name = "payscreen_message")
+    var payscreen_message: String? = null
+    
 }
