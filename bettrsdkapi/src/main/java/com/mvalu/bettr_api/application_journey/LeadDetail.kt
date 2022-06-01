@@ -32,7 +32,7 @@ class LeadDetail() : Parcelable {
     @field:Json(name = "mobileNumber")
     var mobileNumber: String? = null
 
-    @field:Json(name = "kycType")
+    @field:Json(name = "userKycType")
     var kycType: String? = null
 
     @field:Json(name = "loanAmount")
