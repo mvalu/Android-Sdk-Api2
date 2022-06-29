@@ -119,6 +119,9 @@ class LeadDetail() : Parcelable {
     @field:Json(name = "leadRejectedReason")
     var leadRejectedReason: String? = null
 
+    @field:Json(name = "leadrejectedreason")
+    var leadRejectedReasonNew: String? = null
+
 //    @field:Json(name = "sectionDetail")
 //    var sectionDetail: SectionDetail? = null
 
@@ -159,6 +162,7 @@ class LeadDetail() : Parcelable {
             bureauVerified = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
 
             leadRejectedReason = parcel.readString()
+            leadRejectedReasonNew = parcel.readString()
 //        sectionDetail = parcel.readParcelable(SectionDetail::class.java.classLoader)
             lastStep = parcel.readString()
             nextStep = parcel.readString()
@@ -198,6 +202,7 @@ class LeadDetail() : Parcelable {
         parcel.writeValue(bureauVerified)
         
         parcel.writeString(leadRejectedReason)
+        parcel.writeString(leadRejectedReasonNew)
 //        parcel.writeParcelable(sectionDetail, flags)
         parcel.writeString(lastStep)
         parcel.writeString(nextStep)
