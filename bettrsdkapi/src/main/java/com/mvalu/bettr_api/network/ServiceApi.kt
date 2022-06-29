@@ -721,13 +721,13 @@ interface ServiceApi {
         @Body request: IssuanceOtpGenReq
     ): Observable<Response<IssuanceOtpResponse>>
 
-    @POST("v1/{organizationId}/logins/issuanceConsentOtpGeneration")
+    @POST("v1/{organizationId}/logins/resendIssuanceConsentOTP")
     fun issuanceResendOtpGen(
         @Path("organizationId") organizationId: String,
         @Body request: IssuanceResendOtpGenReq
     ): Observable<Response<IssuanceOtpResponse>>
 
-    @POST("v1/{organizationId}/logins/issuanceConsentOtpGeneration")
+    @POST("v1/{organizationId}/logins/verifyIssuanceConsentOTP")
     fun issuanceVerifyOtp(
         @Path("organizationId") organizationId: String,
         @Body request: IssuanceVerifyOtpReq
