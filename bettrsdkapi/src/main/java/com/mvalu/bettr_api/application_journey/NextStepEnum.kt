@@ -22,5 +22,4 @@ enum class NextStepEnum(val value: String) {
     COMPANY_NAME("COMPANY_NAME"),
     UNDER_REVIEW("UNDER_REVIEW")
 
-
 }
