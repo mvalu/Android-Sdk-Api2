@@ -98,6 +98,41 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
 
     private var ckycCallBack:  ApiResponseCallback<VerifyDocumentsResult>? = null
 
+    private var issuanceConsentOtpCallBack:  ApiResponseCallback<IssuanceOtpResponse.Result>? = null
+
+    fun callIssuanceOtpGenApi(
+        request: IssuanceOtpGenReq,
+        issuanceConsentOtpCallBack : ApiResponseCallback<IssuanceOtpResponse.Result>
+    ){
+        if (!BettrApiSdk.isSdkInitialized()) {
+            throw IllegalArgumentException(ErrorMessage.SDK_NOT_INITIALIZED_ERROR.value)
+        }
+        this.issuanceConsentOtpCallBack = issuanceConsentOtpCallBack
+        callApi(serviceApi.issuanceOtpGen(BettrApiSdk.getOrganizationId(), request), ApiTag.ISSUANCE_OTP_GEN_API)
+    }
+
+    fun callIssuanceResendOtpGenApi(
+        request: IssuanceResendOtpGenReq,
+        issuanceConsentOtpCallBack : ApiResponseCallback<IssuanceOtpResponse.Result>
+    ){
+        if (!BettrApiSdk.isSdkInitialized()) {
+            throw IllegalArgumentException(ErrorMessage.SDK_NOT_INITIALIZED_ERROR.value)
+        }
+        this.issuanceConsentOtpCallBack = issuanceConsentOtpCallBack
+        callApi(serviceApi.issuanceResendOtpGen(BettrApiSdk.getOrganizationId(), request), ApiTag.ISSUANCE_RESEND_OTP_GEN_API)
+    }
+
+    fun callIssuanceVerifyOtpApi(
+        request: IssuanceVerifyOtpReq,
+        issuanceConsentOtpCallBack : ApiResponseCallback<IssuanceOtpResponse.Result>
+    ){
+        if (!BettrApiSdk.isSdkInitialized()) {
+            throw IllegalArgumentException(ErrorMessage.SDK_NOT_INITIALIZED_ERROR.value)
+        }
+        this.issuanceConsentOtpCallBack = issuanceConsentOtpCallBack
+        callApi(serviceApi.issuanceVerifyOtp(BettrApiSdk.getOrganizationId(), request), ApiTag.ISSUANCE_VERIFY_OTP_API)
+    }
+
     fun callGetKycStatusApi(
         request: LeadRequest,
         getKycStatusCallBack : ApiResponseCallback<KycStatusApiResponse>
@@ -1178,6 +1213,21 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
                 getKycStatusCallBack?.onSuccess(kycStatusResponse)
             }
 
+            ApiTag.ISSUANCE_OTP_GEN_API -> {
+                val issuanceOtpResponse = response as IssuanceOtpResponse
+                issuanceConsentOtpCallBack?.onSuccess(issuanceOtpResponse.result!!)
+            }
+
+            ApiTag.ISSUANCE_RESEND_OTP_GEN_API -> {
+                val issuanceOtpResponse = response as IssuanceOtpResponse
+                issuanceConsentOtpCallBack?.onSuccess(issuanceOtpResponse.result!!)
+            }
+
+            ApiTag.ISSUANCE_VERIFY_OTP_API -> {
+                val issuanceOtpResponse = response as IssuanceOtpResponse
+                issuanceConsentOtpCallBack?.onSuccess(issuanceOtpResponse.result!!)
+            }
+
             ApiTag.GET_BUREAU_ADDRESS_API -> {
                 val bureauAddrsResponse = response as BureauAddressResponse
                 getBureauAddrsCallBack?.onSuccess(bureauAddrsResponse.result!!)
@@ -1360,6 +1410,19 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
             ApiTag.KYC_STATUS_API -> {
                 getKycStatusCallBack?.onError(errorCode,errorMessage)
             }
+
+            ApiTag.ISSUANCE_OTP_GEN_API -> {
+                issuanceConsentOtpCallBack?.onError(errorCode,errorMessage)
+            }
+
+            ApiTag.ISSUANCE_RESEND_OTP_GEN_API -> {
+                issuanceConsentOtpCallBack?.onError(errorCode,errorMessage)
+            }
+
+            ApiTag.ISSUANCE_VERIFY_OTP_API -> {
+                issuanceConsentOtpCallBack?.onError(errorCode,errorMessage)
+            }
+
             ApiTag.GET_BUREAU_ADDRESS_API -> {
                 getBureauAddrsCallBack?.onError(errorCode,errorMessage)
             }
@@ -1473,6 +1536,18 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
 
             ApiTag.KYC_STATUS_API -> {
                 getKycStatusCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.API_TIMEOUT_ERROR.value)
+            }
+
+            ApiTag.ISSUANCE_OTP_GEN_API -> {
+                issuanceConsentOtpCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.API_TIMEOUT_ERROR.value)
+            }
+
+            ApiTag.ISSUANCE_RESEND_OTP_GEN_API -> {
+                issuanceConsentOtpCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.API_TIMEOUT_ERROR.value)
+            }
+
+            ApiTag.ISSUANCE_VERIFY_OTP_API -> {
+                issuanceConsentOtpCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.API_TIMEOUT_ERROR.value)
             }
 
             ApiTag.GST_INVOICE_UPLOAD_API -> {
@@ -1612,6 +1687,18 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
                 getKycStatusCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.NETWORK_ERROR.value)
             }
 
+            ApiTag.ISSUANCE_OTP_GEN_API -> {
+                issuanceConsentOtpCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.NETWORK_ERROR.value)
+            }
+
+            ApiTag.ISSUANCE_RESEND_OTP_GEN_API -> {
+                issuanceConsentOtpCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.NETWORK_ERROR.value)
+            }
+
+            ApiTag.ISSUANCE_VERIFY_OTP_API -> {
+                issuanceConsentOtpCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.NETWORK_ERROR.value)
+            }
+
             ApiTag.GST_INVOICE_UPLOAD_API -> {
                 uploadGSTInvoiceCallBack?.onError(ErrorMessage.NETWORK_ERROR.value)
             }
@@ -1739,6 +1826,18 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
 
             ApiTag.KYC_STATUS_API -> {
                 getKycStatusCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.AUTH_ERROR.value)
+            }
+
+            ApiTag.ISSUANCE_OTP_GEN_API -> {
+                issuanceConsentOtpCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.AUTH_ERROR.value)
+            }
+
+            ApiTag.ISSUANCE_RESEND_OTP_GEN_API -> {
+                issuanceConsentOtpCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.AUTH_ERROR.value)
+            }
+
+            ApiTag.ISSUANCE_VERIFY_OTP_API -> {
+                issuanceConsentOtpCallBack?.onError(NOT_SPECIFIED_ERROR_CODE,ErrorMessage.AUTH_ERROR.value)
             }
 
             ApiTag.GST_INVOICE_UPLOAD_API -> {

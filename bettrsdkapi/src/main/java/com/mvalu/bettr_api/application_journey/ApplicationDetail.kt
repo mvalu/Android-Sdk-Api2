@@ -93,6 +93,9 @@ class ApplicationDetail() : Parcelable {
     @field:Json(name = "leadRejectedReason")
     var leadRejectedReason: String? = null
 
+    @field:Json(name = "leadrejectedreason")
+    var leadRejectedReasonNew: String? = null
+
     @field:Json(name = "isRazorpayFailed")
     var isRazorpayFailed: Boolean? = false
 
@@ -170,6 +173,7 @@ class ApplicationDetail() : Parcelable {
         bankName = parcel.readString()
         nachRazorpayTokenId = parcel.readString()
         leadRejectedReason = parcel.readString()
+        leadRejectedReasonNew = parcel.readString()
         isRazorpayFailed = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
         showErrorAndroid = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
         isEnachSkip = parcel.readValue(Boolean::class.java.classLoader) as? Boolean
@@ -216,6 +220,7 @@ class ApplicationDetail() : Parcelable {
         parcel.writeString(bankName)
         parcel.writeString(nachRazorpayTokenId)
         parcel.writeString(leadRejectedReason)
+        parcel.writeString(leadRejectedReasonNew)
         parcel.writeValue(isRazorpayFailed)
         parcel.writeValue(showErrorAndroid)
         parcel.writeValue(isEnachSkip)

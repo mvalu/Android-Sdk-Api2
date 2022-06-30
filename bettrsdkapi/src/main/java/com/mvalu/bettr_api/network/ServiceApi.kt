@@ -715,4 +715,22 @@ interface ServiceApi {
         @Body request: LeadRequest
     ): Observable<Response<KycStatusApiResponse>>
 
+    @POST("v1/{organizationId}/logins/issuanceConsentOtpGeneration")
+    fun issuanceOtpGen(
+        @Path("organizationId") organizationId: String,
+        @Body request: IssuanceOtpGenReq
+    ): Observable<Response<IssuanceOtpResponse>>
+
+    @POST("v1/{organizationId}/logins/resendIssuanceConsentOTP")
+    fun issuanceResendOtpGen(
+        @Path("organizationId") organizationId: String,
+        @Body request: IssuanceResendOtpGenReq
+    ): Observable<Response<IssuanceOtpResponse>>
+
+    @POST("v1/{organizationId}/logins/verifyIssuanceConsentOTP")
+    fun issuanceVerifyOtp(
+        @Path("organizationId") organizationId: String,
+        @Body request: IssuanceVerifyOtpReq
+    ): Observable<Response<IssuanceOtpResponse>>
+
 }
