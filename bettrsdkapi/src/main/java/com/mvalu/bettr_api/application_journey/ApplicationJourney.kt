@@ -677,6 +677,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
         aadharBack: String?,
         applicationId: String,
         docType: String,
+        leadId:String,
         verifyDocumentsCallBack: ApiResponseCallback<VerifyDocumentsResult>
     ) {
         if (!BettrApiSdk.isSdkInitialized()) {
@@ -685,7 +686,7 @@ object ApplicationJourney : ApiSdkBase(), ProgressRequestBody.DocumentUploadCall
         this.verifyDocumentsCallBack = verifyDocumentsCallBack
         val verifyDocumentsRequest = VerifyDocumentsRequest().apply {
             this.userId = BettrApiSdk.getUserId()
-            this.leadId = applicationId
+            this.leadId = leadId
             this.pan = panCard
             this.photo = profilePic
             this.aadharFront = aadharFront
